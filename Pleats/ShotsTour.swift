@@ -80,6 +80,14 @@ struct ShotsTour {
         }
         await step("5-done")
         inst.endLesson()
+
+        // 6. Paywall, for the in-app purchase review image (not part of the store screenshots).
+        inst.forcedScheme = .dark
+        inst.shotPaywall = true
+        inst.shotSheet = .paywall
+        await step("6-paywall")
+        inst.shotSheet = nil
+        inst.shotPaywall = false
         write("ready", "done")
     }
 

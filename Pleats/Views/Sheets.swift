@@ -196,6 +196,7 @@ struct RecordingsSheet: View {
 
 struct PaywallSheet: View {
     @EnvironmentObject var store: Store
+    @EnvironmentObject var inst: Instrument
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var scheme
 
@@ -223,7 +224,7 @@ struct PaywallSheet: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
-                if store.pro {
+                if store.pro && !inst.shotPaywall {
                     Label("Unlocked. Enjoy!", systemImage: "checkmark.seal.fill").font(.headline)
                 } else {
                     Button {

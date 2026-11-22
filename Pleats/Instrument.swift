@@ -61,6 +61,7 @@ final class Instrument: ObservableObject {
     @Published var forcedScheme: ColorScheme?
     @Published var shotRegisters = false
     @Published var shotSheet: Sheet?
+    @Published var shotPaywall = false
 
     // Hinge sample log for the simulator probe (screenshots workflow).
     var hingeLog: [(t: Double, a: Double)] = []
