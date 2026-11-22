@@ -20,12 +20,14 @@ struct PlayView: View {
 
     var body: some View {
         let theme = Theme.of(scheme)
+        GeometryReader { safe in
+        let safeTop = safe.safeAreaInsets.top
         GeometryReader { proxy in
             let size = proxy.size
             let fold = foldFrame(proxy).flatMap { f -> CGRect? in (f.width > 0 || f.height > 0) ? f : nil }
             let vertical = fold.map { $0.height >= $0.width } ?? (size.width >= size.height)
             let splitAt: CGFloat = fold.map { vertical ? $0.midX : $0.midY } ?? (vertical ? size.width / 2 : size.height / 2)
-            let top = max(proxy.safeAreaInsets.top, 8) + 52
+            let top = max(safeTop, 8) + 52
             let maxStrip: CGFloat = min(112, max(58, (vertical ? size.width : size.height) * 0.09))
             let strip = maxStrip * CGFloat(0.55 + 0.45 * inst.extension01)
             let pad: CGFloat = 6
@@ -77,7 +79,7 @@ struct PlayView: View {
                 VStack(spacing: 8) {
                     ControlBar(sheet: $sheet, showRegisters: $showRegisters)
                         .padding(.horizontal, 10)
-                        .padding(.top, max(proxy.safeAreaInsets.top, 8))
+                        .padding(.top, max(safeTop, 8))
                     if showRegisters {
                         RegisterTray(show: $showRegisters, sheet: $sheet)
                             .transition(.move(edge: .top).combined(with: .opacity))
@@ -112,6 +114,7 @@ struct PlayView: View {
             .animation(.spring(duration: 0.4), value: inst.finishedLesson != nil)
         }
         .ignoresSafeArea()
+        }
         .statusBarHidden(true)
         .persistentSystemOverlays(.hidden)
         .modifier(HingeReader(instrument: inst))

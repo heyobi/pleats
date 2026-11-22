@@ -24,7 +24,7 @@ struct BoardLayout {
         var s: CGFloat
         switch layout {
         case .chromatic:
-            rows = minor / 5 >= 64 ? 5 : 3
+            rows = (minor / 5 >= 60 && major / 8.6 >= 58) ? 5 : 3
             s = min(max(min(minor / CGFloat(rows) / 0.9, 82), 46), major / (rows == 3 ? 7.6 : 8.6))
         case .diatonic:
             rows = 2
