@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pleats: an accordion for iPhone Duo where the hinge is the bellows</title>
+<meta name="description" content="An accordion app made for iPhone Duo: open and close the hinge to pump the bellows. Chromatic and diatonic button boards, Stradella bass and chords, musette and bandoneon registers, song lessons and recording. Free, with an optional one-time Pro.">
+<meta name="keywords" content="accordion app iPhone, iPhone Duo accordion, play accordion on iPhone, button accordion app, diatonic accordion app, bandoneon app, musette accordion, learn accordion songs, squeezebox app, iPhone Duo apps">
+<link rel="canonical" href="https://heyobi.github.io/pleats/">
+<link rel="icon" href="icon.png">
+<meta name="apple-itunes-app" content="app-id=6837969248">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pleats: an accordion for iPhone Duo where the hinge is the bellows">
+<meta property="og:description" content="An accordion app made for iPhone Duo: open and close the hinge to pump the bellows. Chromatic and diatonic button boards, Stradella bass and chords, musette and bandoneon registers, song lessons and recording. Free, with an optional one-time Pro.">
+<meta property="og:url" content="https://heyobi.github.io/pleats/">
+<meta property="og:image" content="https://heyobi.github.io/pleats/screens/duo-1-play.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Pleats", "operatingSystem": "iOS, iPadOS", "applicationCategory": "MusicApplication", "description": "An accordion app made for iPhone Duo: open and close the hinge to pump the bellows. Chromatic and diatonic button boards, Stradella bass and chords, musette and bandoneon registers, song lessons and recording. Free, with an optional one-time Pro.", "url": "https://apps.apple.com/app/id6837969248", "downloadUrl": "https://apps.apple.com/app/id6837969248", "image": "https://heyobi.github.io/pleats/icon.png", "screenshot": ["https://heyobi.github.io/pleats/screens/duo-1-play.jpg", "https://heyobi.github.io/pleats/screens/duo-2-lesson.jpg", "https://heyobi.github.io/pleats/screens/duo-3-registers.jpg", "https://heyobi.github.io/pleats/screens/iphone-1-play.jpg", "https://heyobi.github.io/pleats/screens/ipad-1-play.jpg"], "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"}, "author": {"@type": "Person", "name": "heyobi", "url": "https://github.com/heyobi"}}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Can I play the accordion on iPhone Duo?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Pleats uses the iPhone Duo hinge as the bellows: hold the phone like a book, half open, and open and close it while pressing the buttons."}}, {"@type": "Question", "name": "Does Pleats work on other iPhones and iPad?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Without a hinge you drag the bellows strip in the middle of the screen back and forth, or turn on Steady air to play without pumping."}}, {"@type": "Question", "name": "Is it a button accordion or a piano accordion?", "acceptedAnswer": {"@type": "Answer", "text": "A button accordion: a chromatic five-row C-system board, or a diatonic G/C push–pull board, with Stradella bass and chord buttons."}}, {"@type": "Question", "name": "Can I learn songs with Pleats?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Pick a song and the next button lights up; play it with air and the song moves on at your pace. You can hear each song first."}}, {"@type": "Question", "name": "Does Pleats use samples?", "acceptedAnswer": {"@type": "Answer", "text": "No. Every note is synthesized on the device from several detuned reeds, so it responds to the bellows like a real instrument."}}, {"@type": "Question", "name": "What does Pleats Pro add?", "acceptedAnswer": {"@type": "Answer", "text": "Five more registers, three more voices, ten more songs and sharing of recordings, for one payment. No subscription."}}]}</script>
+<style>
+:root{--bg:#f7f2e9;--fg:#2a1410;--muted:#6e5a52;--card:#efe6d6;--line:#e0d2bb;--accent:#8a2131}
+@media (prefers-color-scheme:dark){:root{--bg:#0d0608;--fg:#f6eee2;--muted:#b9a99c;--card:#1b1013;--line:#33201f;--accent:#dcb366}}
+h1,h2{font-family:"New York","Iowan Old Style",Georgia,serif;font-weight:600}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+main{max-width:1040px;margin:0 auto;padding:40px 16px 64px}
+header{text-align:center}header img.icon{width:112px;height:112px;border-radius:24px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+h1{font-size:clamp(30px,5vw,46px);line-height:1.15;margin:18px 0 10px;letter-spacing:-.02em}
+.lead{font-size:clamp(17px,2.2vw,20px);color:var(--muted);max-width:720px;margin:0 auto 22px}
+.badge img{height:54px}
+.shots{display:flex;gap:14px;overflow-x:auto;padding:28px 0 8px;scroll-snap-type:x mandatory}
+.shots img{height:min(560px,70vh);border-radius:18px;scroll-snap-align:center;flex:none;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+h2{font-size:28px;margin:48px 0 12px;letter-spacing:-.01em}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}
+.card b{display:block;margin-bottom:4px}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:10px 0}
+summary{font-weight:600;cursor:pointer}
+a{color:var(--accent)}code{font:15px ui-monospace,Menlo,monospace;background:var(--card);padding:1px 6px;border-radius:6px}
+.wide img{width:100%;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.15)}
+footer{color:var(--muted);font-size:14px;margin-top:56px;text-align:center}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <img class="icon" src="icon.png" alt="Pleats app icon" width="112" height="112">
+  <h1>Play the accordion on iPhone Duo</h1>
+  <p class="lead">Pleats turns iPhone Duo into a real, playable accordion. Hold it like a book: the fold is the bellows. Open and close the hinge to pump air, press pearl buttons for melody, bass and chords, and learn songs one lit button at a time. On every iPhone and iPad, drag the bellows instead.</p>
+  <a class="badge" href="https://apps.apple.com/app/id6837969248"><img src="app-store-badge.svg" alt="Download Pleats on the App Store"></a>
+</header>
+<div class="shots">
+    <img src="screens/duo-1-play.jpg" alt="iPhone Duo open like a book: bass buttons on the left, treble buttons on the right, bellows across the fold" loading="lazy">
+    <img src="screens/duo-2-lesson.jpg" alt="Song lesson: the next button glows" loading="lazy">
+    <img src="screens/duo-3-registers.jpg" alt="Register switches in the ivory finish" loading="lazy">
+    <img src="screens/iphone-1-play.jpg" alt="Pleats on iPhone with the bellows strip in the middle" loading="lazy">
+    <img src="screens/ipad-1-play.jpg" alt="Pleats on iPad" loading="lazy">
+</div>
+<h2>A real accordion, folded into your phone</h2>
+<div class="grid">
+    <div class="card"><b>The hinge is the bellows</b>Pressure follows how fast you open or close iPhone Duo. Both directions sound, like a real accordion.</div>
+    <div class="card"><b>Melody, bass and chords</b>Treble buttons on one half, Stradella bass and chord buttons on the other, with full multi-touch.</div>
+    <div class="card"><b>Chromatic or diatonic</b>A five-row C-system button board, or a G/C push–pull board where each button changes note with the bellows.</div>
+    <div class="card"><b>Reeds, synthesized live</b>Detuned reeds, breath, a natural attack and a warm room. Clarinet, Bandoneon and Musette registers.</div>
+    <div class="card"><b>Learn songs</b>The next button lights up and the song waits for you. Hear it first, earn three stars.</div>
+    <div class="card"><b>Every iPhone and iPad</b>No hinge? Drag the bellows strip. Steady air plays without pumping.</div>
+    <div class="card"><b>Record</b>Record a clip of your playing and listen back.</div>
+    <div class="card"><b>Fair</b>Free with no ads or account. One optional purchase for more registers, voices and songs.</div>
+</div>
+
+<h2>Questions</h2>
+  <details><summary>Can I play the accordion on iPhone Duo?</summary><p>Yes. Pleats uses the iPhone Duo hinge as the bellows: hold the phone like a book, half open, and open and close it while pressing the buttons.</p></details>
+  <details><summary>Does Pleats work on other iPhones and iPad?</summary><p>Yes. Without a hinge you drag the bellows strip in the middle of the screen back and forth, or turn on Steady air to play without pumping.</p></details>
+  <details><summary>Is it a button accordion or a piano accordion?</summary><p>A button accordion: a chromatic five-row C-system board, or a diatonic G/C push–pull board, with Stradella bass and chord buttons.</p></details>
+  <details><summary>Can I learn songs with Pleats?</summary><p>Yes. Pick a song and the next button lights up; play it with air and the song moves on at your pace. You can hear each song first.</p></details>
+  <details><summary>Does Pleats use samples?</summary><p>No. Every note is synthesized on the device from several detuned reeds, so it responds to the bellows like a real instrument.</p></details>
+  <details><summary>What does Pleats Pro add?</summary><p>Five more registers, three more voices, ten more songs and sharing of recordings, for one payment. No subscription.</p></details>
+<footer>
+  <p><a href="https://apps.apple.com/app/id6837969248">Pleats on the App Store</a> · <a href="https://github.com/heyobi/pleats">Source code on GitHub</a> · <a href="https://heyobi.github.io/querly/">Querly: CSV viewer for iPhone</a></p>
+  <p>iPhone and iPhone Duo are trademarks of Apple Inc. Melodies are public domain or original.</p>
+</footer>
+</main>
+</body>
+</html>
