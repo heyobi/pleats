@@ -85,6 +85,34 @@
         }
       }
     },
+    "Audio": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ses"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Áudio"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Audio"
+          }
+        }
+      }
+    },
     "Bandoneon": {
       "localizations": {
         "tr": {
@@ -645,6 +673,34 @@
         }
       }
     },
+    "Drag the bellows to play": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çalmak için körüğü sürükleyin"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arrastra el fuelle para tocar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Arraste o fole para tocar"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zieh den Balg, um zu spielen"
+          }
+        }
+      }
+    },
     "Everything in Pleats, with one purchase.": {
       "localizations": {
         "tr": {
@@ -921,6 +977,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "So spielst du"
+          }
+        }
+      }
+    },
+    "Just press a button to play. The strip in the middle is the bellows.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çalmak için bir düğmeye basmanız yeter. Ortadaki şerit körüktür."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pulsa un botón para tocar. La franja del centro es el fuelle."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basta apertar um botão para tocar. A faixa no meio é o fole."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drück einfach einen Knopf, um zu spielen. Der Streifen in der Mitte ist der Balg."
           }
         }
       }
@@ -1369,6 +1453,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ein Kauf, für immer deiner. Kein Abo, keine Werbung."
+          }
+        }
+      }
+    },
+    "Open and close the hinge to play": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çalmak için menteşeyi açıp kapatın"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre y cierra la bisagra para tocar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abra e feche a dobradiça para tocar"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne und schließe das Scharnier, um zu spielen"
           }
         }
       }
@@ -1905,6 +2017,34 @@
         }
       }
     },
+    "Running": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çalışıyor"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funcionando"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Funcionando"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Läuft"
+          }
+        }
+      }
+    },
     "Sea shanty, traditional": {
       "localizations": {
         "tr": {
@@ -2157,6 +2297,34 @@
         }
       }
     },
+    "Sound only while the bellows move": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yalnız körük hareket ederken ses"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonido solo al mover el fuelle"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Som só com o fole em movimento"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton nur, wenn sich der Balg bewegt"
+          }
+        }
+      }
+    },
     "Start over": {
       "localizations": {
         "tr": {
@@ -2269,6 +2437,34 @@
         }
       }
     },
+    "Steady air keeps the reeds sounding without pumping, for practice or if moving the bellows is hard. Without a hinge, buttons sound on their own and dragging the bellows adds dynamics.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sabit hava, pompalamadan dillerin ses vermesini sağlar; alıştırma için ya da körüğü oynatmak zorsa. Menteşe yoksa düğmeler kendiliğinden çalar, körüğü sürüklemek dinamik katar."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El aire constante mantiene sonando las lengüetas sin bombear, para practicar o si mover el fuelle cuesta. Sin bisagra, los botones suenan solos y arrastrar el fuelle añade dinámica."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O ar constante mantém as palhetas soando sem bombear, para praticar ou se mover o fole for difícil. Sem dobradiça, os botões soam sozinhos e arrastar o fole acrescenta dinâmica."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gleichmäßige Luft lässt die Stimmzungen ohne Pumpen klingen, zum Üben oder wenn das Balgziehen schwerfällt. Ohne Scharnier klingen die Knöpfe von selbst, und das Ziehen am Balg bringt Dynamik."
+          }
+        }
+      }
+    },
     "Stop": {
       "localizations": {
         "tr": {
@@ -2353,6 +2549,34 @@
         }
       }
     },
+    "Stopped": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Durdu"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detenido"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parado"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gestoppt"
+          }
+        }
+      }
+    },
     "Tap the record button, play, and tap it again. Your clip appears here.": {
       "localizations": {
         "tr": {
@@ -2405,6 +2629,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Zehn weitere Lieder: ein eigener Tango, The Entertainer, Greensleeves, Sarı Gelin und mehr"
+          }
+        }
+      }
+    },
+    "Test sound": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sesi dene"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Probar sonido"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Testar som"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ton testen"
           }
         }
       }

@@ -74,6 +74,18 @@ struct PlayView: View {
                         .position(x: stripRect.midX, y: stripRect.midY)
                         .allowsHitTesting(false)
                 }
+                if inst.needsPumpHint && inst.lesson == nil {
+                    Label(inst.pumpsWithHinge ? LocalizedStringKey("Open and close the hinge to play") : LocalizedStringKey("Drag the bellows to play"),
+                          systemImage: vertical ? "arrow.left.and.right" : "arrow.up.and.down")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(theme.ink)
+                        .padding(.horizontal, 14).padding(.vertical, 9)
+                        .background(Capsule().fill(.ultraThinMaterial))
+                        .overlay(Capsule().stroke(theme.trim.opacity(0.6), lineWidth: 1))
+                        .position(x: stripRect.midX, y: vertical ? size.height * 0.62 : stripRect.midY)
+                        .allowsHitTesting(false)
+                        .transition(.opacity)
+                }
 
                 // Controls.
                 VStack(spacing: 8) {
@@ -339,7 +351,7 @@ struct LessonBanner: View {
                     }
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel(Text("Next note \(Pitch.name(c.pitch))"))
-                    if inst.pressure < 0.05 && !inst.pressedTreble.isEmpty {
+                    if inst.needsPumpHint {
                         Text(inst.hasHinge && !inst.hingeClosed ? LocalizedStringKey("Pump the hinge") : LocalizedStringKey("Move the bellows"))
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(theme.subtle)
@@ -424,7 +436,7 @@ struct HintCard: View {
             Text("How to play")
                 .font(.system(.title2, design: .serif).weight(.semibold))
             row("book", hasHinge ? "Hold iPhone Duo like a book, half open. The fold is the bellows."
-                                 : "The strip in the middle is the bellows.")
+                                 : "Just press a button to play. The strip in the middle is the bellows.")
             row("arrow.left.and.right", hasHinge ? "Open and close the hinge to pump air. Faster is louder; both directions sound."
                                                  : "Drag it back and forth to pump air. Faster is louder; both directions sound.")
             row("circle.grid.3x3.fill", "Treble buttons on one side, bass and chords on the other. Play as many as you like at once.")

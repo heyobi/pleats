@@ -65,7 +65,7 @@ final class ReedEngine {
     private let recordLock = NSLock()
     private(set) var recordingURL: URL?
 
-    private init() {
+    init() {
         voices = .allocate(capacity: Self.maxVoices)
         voices.initialize(repeating: VoiceShared(), count: Self.maxVoices)
         rt = .allocate(capacity: Self.maxVoices)
@@ -107,17 +107,54 @@ final class ReedEngine {
 
     // MARK: Engine
 
-    func start() {
-        guard !started else { return }
-        let session = AVAudioSession.sharedInstance()
-        try? session.setCategory(.playback, mode: .default, options: [.mixWithOthers])
-        try? session.setPreferredIOBufferDuration(0.004)
-        try? session.setActive(true)
+    /// Last engine error, shown in Settings so a silent device can be diagnosed from TestFlight.
+    private(set) var lastError: String?
+    var isRunning: Bool { engine.isRunning }
 
+    func start() {
+        guard !started else { resume(); return }
+        let session = AVAudioSession.sharedInstance()
+        do {
+            // .playback: the instrument sounds even with the silent switch on, like any music app.
+            try session.setCategory(.playback, mode: .default, options: [.mixWithOthers])
+            try? session.setPreferredIOBufferDuration(0.005)
+            try session.setActive(true)
+        } catch {
+            lastError = "session: \(error.localizedDescription)"
+        }
         let hwRate = session.sampleRate > 0 ? session.sampleRate : 48_000
-        if abs(hwRate - sampleRate) > 1 {
-            sampleRate = hwRate
-            buildTables(sampleRate: hwRate)
+        buildGraph(sampleRate: hwRate)
+        engine.prepare()
+        do {
+            try engine.start()
+            lastError = nil
+        } catch {
+            lastError = "engine: \(error.localizedDescription)"
+        }
+        started = true
+
+        let nc = NotificationCenter.default
+        nc.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: .main) { [weak self] note in
+            guard let self, let raw = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
+                  let type = AVAudioSession.InterruptionType(rawValue: raw) else { return }
+            if type == .ended { self.resume() } else { self.allOff() }
+        }
+        nc.addObserver(forName: AVAudioSession.routeChangeNotification, object: nil, queue: .main) { [weak self] _ in
+            self?.resume()
+        }
+        nc.addObserver(forName: AVAudioSession.mediaServicesWereResetNotification, object: nil, queue: .main) { [weak self] _ in
+            self?.resume()
+        }
+        nc.addObserver(forName: .AVAudioEngineConfigurationChange, object: engine, queue: .main) { [weak self] _ in
+            self?.resume()
+        }
+    }
+
+    /// Source → body EQ → hall → main mixer, at the given sample rate (tables are rebuilt if it changed).
+    private func buildGraph(sampleRate rate: Double) {
+        if abs(rate - sampleRate) > 1 {
+            sampleRate = rate
+            buildTables(sampleRate: rate)
         }
         let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)!
         let render = Self.makeRender(voices: voices, rt: rt, params: params, tables: tables, sampleRate: sampleRate)
@@ -142,31 +179,39 @@ final class ReedEngine {
         engine.connect(source, to: body, format: format)
         engine.connect(body, to: reverb, format: format)
         engine.connect(reverb, to: engine.mainMixerNode, format: nil)
-        engine.prepare()
-        try? engine.start()
-        started = true
+    }
 
-        NotificationCenter.default.addObserver(forName: AVAudioSession.interruptionNotification, object: nil, queue: .main) { [weak self] note in
-            guard let self, let raw = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
-                  let type = AVAudioSession.InterruptionType(rawValue: raw) else { return }
-            if type == .ended { self.resume() } else { self.allOff() }
-        }
-        NotificationCenter.default.addObserver(forName: .AVAudioEngineConfigurationChange, object: engine, queue: .main) { [weak self] _ in
-            self?.resume()
-        }
+    /// Offline rendering for tests: the same graph, rendered without audio hardware.
+    func startOffline(maxFrames: AVAudioFrameCount = 4096) throws {
+        buildGraph(sampleRate: 48_000)
+        let out = AVAudioFormat(standardFormatWithSampleRate: 48_000, channels: 2)!
+        try engine.enableManualRenderingMode(.offline, format: out, maximumFrameCount: maxFrames)
+        try engine.start()
+        started = true
+    }
+
+    /// Renders `frames` offline and returns the RMS level of the first channel.
+    func renderOfflineRMS(frames: AVAudioFrameCount) throws -> Float {
+        let buf = AVAudioPCMBuffer(pcmFormat: engine.manualRenderingFormat, frameCapacity: frames)!
+        _ = try engine.renderOffline(frames, to: buf)
+        guard let ch = buf.floatChannelData?[0] else { return 0 }
+        var sum: Float = 0
+        for i in 0..<Int(buf.frameLength) { sum += ch[i] * ch[i] }
+        return (sum / Float(max(1, buf.frameLength))).squareRoot()
     }
 
     func resume() {
-        guard started, !engine.isRunning else { return }
+        guard started, !engine.isRunning, !engine.isInManualRenderingMode else { return }
         try? AVAudioSession.sharedInstance().setActive(true)
         engine.prepare()
-        try? engine.start()
+        do { try engine.start(); lastError = nil } catch { lastError = "engine: \(error.localizedDescription)" }
     }
 
     // MARK: Notes
 
     /// Starts the notes of a button. `id` must be unique per button (treble, bass and demo use separate ranges).
     func press(_ id: Int, notes: [Int], side: Side) {
+        if started && !engine.isRunning { resume() }
         if held[id] != nil { retune(id, notes: notes); return }
         var got: [Int] = []
         for note in notes {

@@ -144,3 +144,54 @@ final class SongTests: XCTestCase {
         XCTAssertEqual(p.stars, 3)
     }
 }
+
+/// Renders the real synth graph offline: a held note with air must be audible, and silent without air.
+final class AudioTests: XCTestCase {
+    func testNoteWithAirIsAudible() throws {
+        let e = ReedEngine()
+        try e.startOffline()
+        e.setRegister(.musette)
+        e.setVoice(.classic)
+        e.pressure = 0.6
+        e.press(1, notes: [60], side: .treble)
+        _ = try e.renderOfflineRMS(frames: 4096)            // attack
+        let rms = try e.renderOfflineRMS(frames: 4096)
+        XCTAssertGreaterThan(rms, 0.01, "held note with air should sound (rms \(rms))")
+        XCTAssertLessThan(rms, 0.9, "no clipping wall (rms \(rms))")
+    }
+
+    func testNoAirIsSilent() throws {
+        let e = ReedEngine()
+        try e.startOffline()
+        e.pressure = 0
+        e.press(1, notes: [60], side: .treble)
+        _ = try e.renderOfflineRMS(frames: 4096)
+        let rms = try e.renderOfflineRMS(frames: 4096)
+        XCTAssertLessThan(rms, 0.003)
+    }
+
+    func testChordAndBassSound() throws {
+        let e = ReedEngine()
+        try e.startOffline()
+        e.pressure = 0.5
+        e.press(10_005, notes: [36, 48], side: .bass)
+        e.press(1, notes: [60, 64, 67], side: .treble)
+        _ = try e.renderOfflineRMS(frames: 4096)
+        XCTAssertGreaterThan(try e.renderOfflineRMS(frames: 4096), 0.01)
+    }
+}
+
+@MainActor
+final class AirTests: XCTestCase {
+    func testButtonsSoundWithoutAHinge() {
+        UserDefaults.standard.removeObject(forKey: "pumpOnly")
+        UserDefaults.standard.removeObject(forKey: "steadyAir")
+        let inst = Instrument()
+        XCTAssertFalse(inst.hasHinge)
+        XCTAssertTrue(inst.automaticAir, "an iPhone without a hinge must not need pumping to make sound")
+        inst.hingeChanged(angle: 120, closed: false, present: true)
+        XCTAssertFalse(inst.automaticAir, "an open iPhone Duo pumps with the hinge")
+        inst.hingeChanged(angle: 0, closed: true, present: true)
+        XCTAssertTrue(inst.automaticAir, "a folded Duo plays like any iPhone")
+    }
+}

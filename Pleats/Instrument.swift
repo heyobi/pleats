@@ -11,6 +11,9 @@ final class Instrument: ObservableObject {
     @AppStorage("voice") var voiceRaw = Voice.classic.rawValue { didSet { applySound() } }
     @AppStorage("noteNames") var noteNames = true
     @AppStorage("steadyAir") var steadyAir = false
+    /// Off by default: without a working hinge, pressing a button supplies air by itself, and dragging the bellows
+    /// strip adds dynamics on top. On means sound only while the bellows move (also on non-Duo devices).
+    @AppStorage("pumpOnly") var pumpOnly = false
     @AppStorage("sensitivity") var sensitivity = 1.0 { didSet { bellows.fullScale = 110 / max(0.3, sensitivity) } }
     @AppStorage("bassLevel") var bassLevel = 0.8 { didSet { ReedEngine.shared.setBassLevel(bassLevel) } }
 
@@ -153,15 +156,34 @@ final class Instrument: ObservableObject {
         sounding.removeAll()     // new pitches: let the lesson hear them
     }
 
+    /// True when air comes from the hinge: an iPhone Duo that is open.
+    var pumpsWithHinge: Bool { hasHinge && !hingeClosed }
+
+    /// Air arrives without moving anything: steady air, or a device without a usable hinge.
+    var automaticAir: Bool { steadyAir || (!pumpsWithHinge && !pumpOnly) }
+
+    /// Shown when buttons are held on an open iPhone Duo but the hinge has not moved for a while.
+    @Published private(set) var needsPumpHint = false
+    private var silentHoldSince: Double?
+
     private func updateAir() {
+        let holding = !pressedTreble.isEmpty || !pressedBass.isEmpty
         var p = bellows.pressure
-        if steadyAir { p = max(p, 0.62) }
+        if automaticAir { p = max(p, 0.58) }
         if demoPlaying { p = max(p, 0.6) }
         if frozen { return }
         if abs(p - pressure) > 0.004 { pressure = p }
         ReedEngine.shared.pressure = p
-        let holding = !pressedTreble.isEmpty || !pressedBass.isEmpty
-        Haptics.shared.air(holding && !steadyAir ? p : 0)
+        Haptics.shared.air(holding && !automaticAir ? p : 0)
+        // On a Duo, a held button with a still hinge for over a second earns a gentle hint.
+        let now = CACurrentMediaTime()
+        if holding && p < 0.04 {
+            if silentHoldSince == nil { silentHoldSince = now }
+            if !needsPumpHint, let s = silentHoldSince, now - s > 1.0 { needsPumpHint = true }
+        } else {
+            silentHoldSince = nil
+            if needsPumpHint && p > 0.1 { needsPumpHint = false }
+        }
         listen()
     }
 
@@ -280,6 +302,19 @@ final class Instrument: ObservableObject {
                 }
             }
             self?.stopDemo()
+        }
+    }
+
+    /// Settings › Test sound: a short C major chord with air, whatever the bellows are doing.
+    func testSound() {
+        start()
+        demoPlaying = true
+        ReedEngine.shared.press(Self.demoIDBase + 1, notes: [60, 64, 67], side: .treble)
+        updateAir()
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: 900_000_000)
+            ReedEngine.shared.release(Self.demoIDBase + 1)
+            self?.demoPlaying = false
         }
     }
 

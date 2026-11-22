@@ -112,11 +112,14 @@ struct SettingsSheet: View {
                         Slider(value: $inst.bassLevel, in: 0.2...1.2)
                     }
                     Toggle("Steady air", isOn: $inst.steadyAir)
+                    if !inst.pumpsWithHinge {
+                        Toggle("Sound only while the bellows move", isOn: $inst.pumpOnly)
+                    }
                     Toggle("Haptics", isOn: $haptics)
                 } header: {
                     Text("Bellows")
                 } footer: {
-                    Text("Steady air keeps the reeds sounding without pumping, for practice or if moving the bellows is hard.")
+                    Text("Steady air keeps the reeds sounding without pumping, for practice or if moving the bellows is hard. Without a hinge, buttons sound on their own and dragging the bellows adds dynamics.")
                 }
                 Section {
                     if store.pro {
@@ -130,6 +133,8 @@ struct SettingsSheet: View {
                 }
                 Section {
                     Link(destination: URL(string: "https://heyobi.github.io/pleats/")!) { Label("Website and privacy", systemImage: "globe") }
+                    Button { inst.testSound() } label: { Label("Test sound", systemImage: "speaker.wave.2") }
+                    LabeledContent("Audio", value: ReedEngine.shared.isRunning ? String(localized: "Running") : (ReedEngine.shared.lastError ?? String(localized: "Stopped")))
                     LabeledContent("Version", value: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")
                 } footer: {
                     Text("No accounts, no ads, no tracking. Every sound is synthesized on your device.")
