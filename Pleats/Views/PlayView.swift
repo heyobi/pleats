@@ -27,9 +27,9 @@ struct PlayView: View {
             let fold = foldFrame(proxy).flatMap { f -> CGRect? in (f.width > 0 || f.height > 0) ? f : nil }
             let vertical = fold.map { $0.height >= $0.width } ?? (size.width >= size.height)
             let splitAt: CGFloat = fold.map { vertical ? $0.midX : $0.midY } ?? (vertical ? size.width / 2 : size.height / 2)
-            let top = max(safeTop, 8) + 52
-            let maxStrip: CGFloat = min(112, max(58, (vertical ? size.width : size.height) * 0.09))
-            let strip = maxStrip * CGFloat(0.55 + 0.45 * inst.extension01)
+            let top = max(safeTop, 8) + 52 + (inst.lesson != nil ? 60 : 0)
+            let maxStrip: CGFloat = min(150, max(72, (vertical ? size.width : size.height) * 0.14))
+            let strip = 24 + (maxStrip - 24) * CGFloat(inst.extension01)
             let pad: CGFloat = 6
             let inner = maxStrip / 2 + 4
 
@@ -92,13 +92,14 @@ struct PlayView: View {
                     ControlBar(sheet: $sheet, showRegisters: $showRegisters)
                         .padding(.horizontal, 10)
                         .padding(.top, max(safeTop, 8))
-                    if showRegisters {
-                        RegisterTray(show: $showRegisters, sheet: $sheet)
+                    if inst.lesson != nil {
+                        LessonBar()
+                            .frame(height: 52)
+                            .padding(.horizontal, 10)
                             .transition(.move(edge: .top).combined(with: .opacity))
                     }
-                    if inst.lesson != nil, !showRegisters {
-                        LessonBanner()
-                            .frame(maxWidth: 560)
+                    if showRegisters {
+                        RegisterTray(show: $showRegisters, sheet: $sheet)
                             .transition(.move(edge: .top).combined(with: .opacity))
                     }
                     Spacer()
@@ -218,16 +219,49 @@ struct ControlBar: View {
                     .accessibilityLabel(Text("Recordings"))
             }
             Spacer(minLength: 4)
-            VStack(spacing: 0) {
-                Text("Pleats")
-                    .font(.system(size: 22, weight: .semibold, design: .serif).italic())
-                    .foregroundStyle(theme.trim)
-                Text(inst.register.name)
-                    .font(.system(size: 11, weight: .medium, design: .serif))
-                    .foregroundStyle(theme.subtle)
+            ViewThatFits(in: .horizontal) {
+                VStack(spacing: 0) {
+                    if let l = inst.lesson {
+                        Text(l.plan.song.title)
+                            .font(.system(size: 15, weight: .semibold, design: .serif))
+                            .foregroundStyle(theme.ink)
+                            .lineLimit(1)
+                        ProgressView(value: l.fraction).tint(theme.trim).frame(width: 120)
+                    } else {
+                        Text("Pleats")
+                            .font(.system(size: 22, weight: .semibold, design: .serif).italic())
+                            .foregroundStyle(theme.trim)
+                        Text(inst.register.name)
+                            .font(.system(size: 11, weight: .medium, design: .serif))
+                            .foregroundStyle(theme.subtle)
+                    }
+                }
+                .fixedSize()
+                Color.clear.frame(width: 1, height: 1)
             }
             .accessibilityElement(children: .combine)
             Spacer(minLength: 4)
+            Group {
+                // One switch for air without pumping: Easy air without a hinge, Steady air on an open iPhone Duo.
+                let on = inst.pumpsWithHinge ? inst.steadyAir : inst.easyAir
+                Button {
+                    if inst.pumpsWithHinge { inst.steadyAir.toggle() } else { inst.easyAir.toggle() }
+                    Haptics.shared.button()
+                } label: {
+                    Text(inst.pumpsWithHinge ? LocalizedStringKey("Steady air") : LocalizedStringKey("Easy air"))
+                        .font(.system(size: 12, weight: .semibold))
+                        .lineLimit(1)
+                        .fixedSize()
+                        .foregroundStyle(on ? theme.bodyBottom : theme.ink)
+                        .padding(.horizontal, 10)
+                        .frame(height: 32)
+                        .background(Capsule().fill(on ? AnyShapeStyle(theme.trim) : AnyShapeStyle(.ultraThinMaterial)))
+                        .overlay(Capsule().stroke(theme.trim.opacity(0.8), lineWidth: 1))
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text("Easy air"))
+                .accessibilityValue(on ? Text("On: buttons sound without pumping") : Text("Off: move the bellows to play"))
+            }
             Button { showRegisters.toggle() } label: {
                 RegisterSymbol(register: inst.register, theme: theme).frame(width: 26, height: 26).brassControl(theme, active: showRegisters)
             }
@@ -323,55 +357,131 @@ struct RegisterTray: View {
 
 // MARK: - Lesson banner
 
-struct LessonBanner: View {
+/// The song row under the control bar. It has its own space, so it never covers buttons.
+struct LessonBar: View {
     @EnvironmentObject var inst: Instrument
     @Environment(\.colorScheme) var scheme
 
     var body: some View {
         let theme = Theme.of(scheme)
         if let l = inst.lesson {
-            HStack(spacing: 12) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(l.plan.song.title)
-                        .font(.system(.subheadline, design: .serif).weight(.semibold))
-                        .foregroundStyle(theme.ink)
-                        .lineLimit(1)
-                    ProgressView(value: l.fraction).tint(theme.trim)
+            HStack(spacing: 8) {
+                // Two clearly named modes.
+                HStack(spacing: 0) {
+                    modeButton("Play along", icon: "hand.point.up.left", on: !inst.demoPlaying, theme: theme) { inst.stopDemo() }
+                    modeButton("Listen", icon: "ear", on: inst.demoPlaying, theme: theme) { inst.playDemo() }
                 }
-                if let c = l.current {
-                    HStack(spacing: 4) {
-                        if let d = c.direction {
-                            Image(systemName: d == .pull ? "arrow.left.and.right.square" : "arrow.right.and.line.vertical.and.arrow.left")
-                                .foregroundStyle(d == .pull ? theme.glow : theme.pushGlow)
-                        }
-                        Text(Pitch.name(c.pitch))
-                            .font(.system(size: 22, weight: .bold, design: .serif))
-                            .foregroundStyle(theme.glow)
-                            .contentTransition(.numericText())
-                    }
-                    .accessibilityElement(children: .combine)
-                    .accessibilityLabel(Text("Next note \(Pitch.name(c.pitch))"))
-                    if inst.needsPumpHint {
-                        Text(inst.hasHinge && !inst.hingeClosed ? LocalizedStringKey("Pump the hinge") : LocalizedStringKey("Move the bellows"))
+                .background(Capsule().fill(.black.opacity(0.25)))
+                .overlay(Capsule().stroke(theme.trim.opacity(0.5), lineWidth: 1))
+                ZStack(alignment: .leading) {
+                    RhythmStrip(progress: l, theme: theme)
+                    if !inst.seenLessonHint && !inst.demoPlaying {
+                        Text("Press the glowing button. Listen plays the song for you first.")
                             .font(.caption.weight(.semibold))
-                            .foregroundStyle(theme.subtle)
+                            .foregroundStyle(theme.ink)
+                            .padding(.horizontal, 10).padding(.vertical, 5)
+                            .background(Capsule().fill(.ultraThinMaterial))
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.8)
+                    } else if inst.needsPumpHint {
+                        Text(inst.pumpsWithHinge ? LocalizedStringKey("Pump the hinge") : LocalizedStringKey("Move the bellows"))
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(theme.ink)
+                            .padding(.horizontal, 10).padding(.vertical, 5)
+                            .background(Capsule().fill(.ultraThinMaterial))
                     }
                 }
-                Button { inst.demoPlaying ? inst.stopDemo() : inst.playDemo() } label: {
-                    Image(systemName: inst.demoPlaying ? "stop.fill" : "ear").brassControl(theme)
-                }
-                .accessibilityLabel(inst.demoPlaying ? Text("Stop listening") : Text("Listen"))
+                .frame(maxWidth: .infinity)
                 Button { inst.restartLesson() } label: { Image(systemName: "arrow.counterclockwise").brassControl(theme) }
                     .accessibilityLabel(Text("Start over"))
                 Button { inst.endLesson() } label: { Image(systemName: "xmark").brassControl(theme) }
                     .accessibilityLabel(Text("Close song"))
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 8)
-            .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(.ultraThinMaterial))
-            .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).stroke(theme.trim.opacity(0.45), lineWidth: 1))
-            .padding(.horizontal, 12)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(RoundedRectangle(cornerRadius: 18, style: .continuous).fill(.ultraThinMaterial))
+            .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).stroke(theme.trim.opacity(0.4), lineWidth: 1))
             .sensoryFeedback(.error, trigger: inst.lessonFeedback == .wrong ? l.mistakes : 0)
+        }
+    }
+
+    private func modeButton(_ title: LocalizedStringKey, icon: String, on: Bool, theme: Theme, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Label(title, systemImage: icon)
+                .font(.system(size: 13, weight: .semibold))
+                .labelStyle(.titleAndIcon)
+                .lineLimit(1)
+                .padding(.horizontal, 10)
+                .frame(height: 34)
+                .foregroundStyle(on ? theme.bodyBottom : theme.ink)
+                .background(Capsule().fill(on ? AnyShapeStyle(theme.trim) : AnyShapeStyle(Color.clear)))
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(on ? .isSelected : [])
+    }
+}
+
+/// The notes ahead as bars: the length shows how long to hold, a gap and a dot mark a repeated note, the current
+/// note glows.
+struct RhythmStrip: View {
+    let progress: LessonProgress
+    let theme: Theme
+
+    private var currentNote: Int {
+        var step = 0
+        for (i, n) in progress.plan.song.notes.enumerated() where n.pitch != nil {
+            if step == progress.index { return i }
+            step += 1
+        }
+        return progress.plan.song.notes.count
+    }
+
+    var body: some View {
+        let notes = progress.plan.song.notes
+        let current = currentNote
+        let start = max(0, current - 1)
+        let end = min(notes.count, start + 14)
+        GeometryReader { geo in
+            let unit = max(18, min(34, geo.size.width / 9))
+            HStack(spacing: 3) {
+                ForEach(start..<end, id: \.self) { i in
+                    bar(notes: notes, i: i, current: current, unit: unit)
+                }
+            }
+            .frame(height: geo.size.height, alignment: .leading)
+            .animation(.easeOut(duration: 0.18), value: progress.index)
+        }
+        .clipped()
+        .accessibilityElement()
+        .accessibilityLabel(Text("Upcoming notes"))
+    }
+
+    @ViewBuilder
+    private func bar(notes: [SongNote], i: Int, current: Int, unit: CGFloat) -> some View {
+        let n = notes[i]
+        let w = max(16, CGFloat(n.beats) * unit)
+        if let p = n.pitch {
+            let isCurrent = i == current
+            let past = i < current
+            let repeated = i > 0 && notes[i - 1].pitch == p
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .fill(isCurrent ? AnyShapeStyle(theme.glow) : AnyShapeStyle(theme.ink.opacity(past ? 0.12 : 0.28)))
+                .overlay(alignment: .leading) {
+                    Text(Pitch.name(p + progress.plan.transpose))
+                        .font(.system(size: 11, weight: .bold, design: .serif))
+                        .foregroundStyle(isCurrent ? theme.bodyBottom : theme.ink.opacity(past ? 0.4 : 0.9))
+                        .padding(.leading, 4)
+                        .lineLimit(1)
+                        .fixedSize()
+                }
+                .overlay(alignment: .topTrailing) {
+                    if repeated && !past {
+                        Circle().fill(theme.ink.opacity(0.8)).frame(width: 4, height: 4).padding(3)
+                    }
+                }
+                .frame(width: w, height: isCurrent ? 30 : 24)
+        } else {
+            Color.clear.frame(width: w, height: 24)
         }
     }
 }

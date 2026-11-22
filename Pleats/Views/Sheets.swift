@@ -113,13 +113,13 @@ struct SettingsSheet: View {
                     }
                     Toggle("Steady air", isOn: $inst.steadyAir)
                     if !inst.pumpsWithHinge {
-                        Toggle("Sound only while the bellows move", isOn: $inst.pumpOnly)
+                        Toggle("Easy air (buttons sound without pumping)", isOn: $inst.easyAir)
                     }
                     Toggle("Haptics", isOn: $haptics)
                 } header: {
                     Text("Bellows")
                 } footer: {
-                    Text("Steady air keeps the reeds sounding without pumping, for practice or if moving the bellows is hard. Without a hinge, buttons sound on their own and dragging the bellows adds dynamics.")
+                    Text("Steady air keeps the reeds sounding without pumping, for practice or if moving the bellows is hard. With Easy air off, the bellows work like a real accordion: drag them open and closed to play, faster is louder.")
                 }
                 Section {
                     if store.pro {

@@ -5,7 +5,7 @@ import json, os
 D = os.path.join(os.path.dirname(__file__), 'i18n')
 LANGS = ['tr', 'es', 'pt-BR', 'de']
 strings = {}
-for part in (1, 2, 3, 4):
+for part in (1, 2, 3, 4, 5):
     keys = json.load(open(os.path.join(D, f'keys{part}.json'), encoding='utf-8'))
     for lang in LANGS:
         vals = json.load(open(os.path.join(D, f'{lang}{part}.json'), encoding='utf-8'))

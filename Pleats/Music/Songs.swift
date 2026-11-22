@@ -75,7 +75,14 @@ enum SongParser {
 /// The song book. Every melody is public domain: anonymous folk tunes or works whose composers died long ago,
 /// transcribed for this app (Turkish tunes rounded to equal temperament, as accordionists play them).
 enum SongBook {
-    static let all: [Song] = [
+    /// Easiest and best known first, then by difficulty; Pro songs after the free ones.
+    static let order = ["ode", "saints", "susanna", "grace", "cucaracha", "sailor", "uskudar", "valse", "scale",
+                        "jingle", "cancan", "lullaby", "auldlang", "greensleeves", "elise", "entertainer", "tango",
+                        "sarigelin", "yemen"]
+
+    static let all: [Song] = order.compactMap { id in book.first { $0.id == id } } + book.filter { !order.contains($0.id) }
+
+    private static let book: [Song] = [
         Song("scale", "First Steps: C Major Scale", String(localized: "Warm-up"), tempo: 80, free: true, """
         [C] C4 D4 E4 F4 | [G] G4 A4 B4 [C] C5:2 | R:1 [C] C5 B4 A4 | [G] G4 F4 E4 D4 | [C] C4:3 R:1
         """),
@@ -113,8 +120,8 @@ enum SongBook {
         R:1 [C] E4 E4 D4 | C4:3 C4 | [C7] E4:2 G4:2 | [F] G4 F4:3 | R:1 [C] E4 F4 G4 | E4:2 C4:2 | [G7] D4:2 D4:2 | [C] C4:4
         """),
         Song("grace", "Amazing Grace", String(localized: "Traditional, USA"), tempo: 84, free: true, """
-        [G] D4 | G4:2 B4:.5 G4:.5 | B4:2 A4 | [C] G4:2 E4 | [G] D4:2 D4 | G4:2 B4:.5 G4:.5 | B4:2 A4 | [D] D5:3 | D5:2 B4 |
-        [G] D5:1.5 B4:.5 D5:.5 B4:.5 | G4:2 D4 | [C] E4:1.5 G4:.5 G4:.5 E4:.5 | [G] D4:2 D4 | G4:2 B4:.5 G4:.5 | [D7] B4:2 A4 | [G] G4:3
+        [G] D4 | G4:2 B4:.5 G4:.5 | B4:2 A4 | [C] G4:2 E4 | [G] D4:2 D4 | G4:2 B4:.5 G4:.5 | B4:2 A4 | [D] D5:5 B4 |
+        [G] D5:2 B4:.5 G4:.5 | B4:2 A4 | [C] G4:2 E4 | [G] D4:2 D4 | G4:2 B4:.5 G4:.5 | [D7] B4:2 A4 | [G] G4:3
         """),
         Song("jingle", "Jingle Bells", String(localized: "J. L. Pierpont, 1857"), tempo: 132, free: false, """
         [C] E4 E4 E4:2 | E4 E4 E4:2 | E4 G4 C4:1.5 D4:.5 | E4:4 | [F] F4 F4 F4:1.5 F4:.5 | [C] F4 E4 E4 E4:.5 E4:.5 | [D7] E4 D4 D4 E4 | [G7] D4:2 G4:2 |
@@ -146,10 +153,10 @@ enum SongBook {
         [C] G5:1.5 G5:.75 F#5:.25 E5:.5 | [G] D5:1 B4:.5 G4:.75 A4:.25 B4:.5 | [Am] C5:.75 B4:.25 A4:.5 [E] G#4:.75 F#4:.25 G#4:.5 | [Am] A4:1.5 A4:1
         """),
         Song("auldlang", "Auld Lang Syne", String(localized: "Traditional, Scotland"), tempo: 92, free: false, """
-        [C] G3 | C4:1.5 C4:.5 C4 E4 | [G7] D4:1.5 C4:.5 D4 E4:.5 D4:.5 | [C] C4:1.5 C4:.5 E4 G4 | [F] A4:3 A4 |
-        [C] G4:1.5 E4:.5 E4 C4 | [G7] D4:1.5 C4:.5 D4 E4:.5 D4:.5 | [Am] C4:1.5 A3:.5 [F] A3 G3 | [C] C4:3 A4 |
+        [C] G3 | C4:1.5 C4:.5 C4 E4 | [G7] D4:1.5 C4:.5 D4 E4 | [C] C4:1.5 C4:.5 E4 G4 | [F] A4:3 A4 |
+        [C] G4:1.5 E4:.5 E4 C4 | [G7] D4:1.5 C4:.5 D4 E4 | [Am] C4:1.5 A3:.5 [F] A3 G3 | [C] C4:3 A4 |
         [C] G4:1.5 E4:.5 E4 C4 | [G7] D4:1.5 C4:.5 D4 A4 | [C] G4:1.5 E4:.5 E4 G4 | [F] A4:3 C5 |
-        [C] G4:1.5 E4:.5 E4 C4 | [G7] D4:1.5 C4:.5 D4 E4:.5 D4:.5 | [Am] C4:1.5 A3:.5 [F] A3 G3 | [C] C4:3
+        [C] G4:1.5 E4:.5 E4 C4 | [G7] D4:1.5 C4:.5 D4 E4 | [Am] C4:1.5 A3:.5 [F] A3 G3 | [C] C4:3
         """),
         Song("cancan", "Can-Can", String(localized: "J. Offenbach, 1858"), tempo: 132, free: false, """
         [C] C4 D4:.5 F4:.5 E4:.5 D4:.5 G4 | [G7] G4 G4:.5 A4:.5 E4:.5 F4:.5 D4 | D4 D4:.5 F4:.5 E4:.5 D4:.5 [C] C4:.5 C5:.5 | B4:.5 A4:.5 G4:.5 F4:.5 [G7] E4:.5 D4:.5 [C] C4 |

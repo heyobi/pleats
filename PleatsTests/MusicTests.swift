@@ -184,14 +184,30 @@ final class AudioTests: XCTestCase {
 @MainActor
 final class AirTests: XCTestCase {
     func testButtonsSoundWithoutAHinge() {
-        UserDefaults.standard.removeObject(forKey: "pumpOnly")
+        UserDefaults.standard.removeObject(forKey: "easyAir")
         UserDefaults.standard.removeObject(forKey: "steadyAir")
         let inst = Instrument()
         XCTAssertFalse(inst.hasHinge)
-        XCTAssertTrue(inst.automaticAir, "an iPhone without a hinge must not need pumping to make sound")
+        XCTAssertTrue(inst.automaticAir, "Easy air is on for a first run: buttons sound without pumping")
         inst.hingeChanged(angle: 120, closed: false, present: true)
         XCTAssertFalse(inst.automaticAir, "an open iPhone Duo pumps with the hinge")
         inst.hingeChanged(angle: 0, closed: true, present: true)
         XCTAssertTrue(inst.automaticAir, "a folded Duo plays like any iPhone")
+        inst.easyAir = false
+        XCTAssertFalse(inst.automaticAir, "with Easy air off the bellows must move")
+        inst.easyAir = true
+    }
+
+    func testManualBellowsHaveEnds() {
+        let inst = Instrument()
+        inst.easyAir = false
+        defer { inst.easyAir = true }
+        inst.dragBellows(by: -10_000)
+        XCTAssertEqual(inst.extension01, 0)
+        inst.dragBellows(by: 40)
+        XCTAssertGreaterThan(inst.extension01, 0.1)
+        XCTAssertLessThan(inst.extension01, 0.2)
+        inst.dragBellows(by: 10_000)
+        XCTAssertEqual(inst.extension01, 1)
     }
 }

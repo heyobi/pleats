@@ -701,6 +701,62 @@
         }
       }
     },
+    "Easy air": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kolay hava"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aire fácil"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ar fácil"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leichte Luft"
+          }
+        }
+      }
+    },
+    "Easy air (buttons sound without pumping)": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kolay hava (düğmeler pompalamadan çalar)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aire fácil (los botones suenan sin bombear)"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ar fácil (os botões soam sem bombear)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leichte Luft (Knöpfe klingen ohne Pumpen)"
+          }
+        }
+      }
+    },
     "Everything in Pleats, with one purchase.": {
       "localizations": {
         "tr": {
@@ -1429,6 +1485,62 @@
         }
       }
     },
+    "Off: move the bellows to play": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kapalı: çalmak için körüğü oynatın"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desactivado: mueve el fuelle para tocar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Desligado: mova o fole para tocar"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus: Bewege den Balg, um zu spielen"
+          }
+        }
+      }
+    },
+    "On: buttons sound without pumping": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Açık: düğmeler pompalamadan çalar"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Activado: los botones suenan sin bombear"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ligado: os botões soam sem bombear"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "An: Knöpfe klingen ohne Pumpen"
+          }
+        }
+      }
+    },
     "One purchase, yours for good. No subscription, no ads.": {
       "localizations": {
         "tr": {
@@ -1709,6 +1821,34 @@
         }
       }
     },
+    "Play along": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birlikte çal"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tocar junto"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitspielen"
+          }
+        }
+      }
+    },
     "Pleats Pro": {
       "localizations": {
         "tr": {
@@ -1789,6 +1929,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pleats Pro ist freigeschaltet. Danke!"
+          }
+        }
+      }
+    },
+    "Press the glowing button. Listen plays the song for you first.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parlayan düğmeye basın. Dinle, şarkıyı önce sizin için çalar."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pulsa el botón que brilla. Escuchar toca la canción por ti primero."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aperte o botão que brilha. Ouvir toca a música para você antes."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drück den leuchtenden Knopf. Anhören spielt dir das Lied zuerst vor."
           }
         }
       }
@@ -2433,6 +2601,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gleichmäßige Luft lässt die Stimmzungen ohne Pumpen klingen, zum Üben oder wenn das Balgziehen schwerfällt."
+          }
+        }
+      }
+    },
+    "Steady air keeps the reeds sounding without pumping, for practice or if moving the bellows is hard. With Easy air off, the bellows work like a real accordion: drag them open and closed to play, faster is louder.": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sabit hava, pompalamadan dillerin ses vermesini sağlar; alıştırma için ya da körüğü oynatmak zorsa. Kolay hava kapalıyken körük gerçek akordeon gibi çalışır: çalmak için açıp kapatın, hızlı hareket daha yüksek ses verir."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El aire constante mantiene sonando las lengüetas sin bombear, para practicar o si mover el fuelle cuesta. Con Aire fácil desactivado, el fuelle funciona como en un acordeón real: ábrelo y ciérralo para tocar; más rápido suena más fuerte."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "O ar constante mantém as palhetas soando sem bombear, para praticar ou se mover o fole for difícil. Com o Ar fácil desligado, o fole funciona como num acordeão de verdade: abra e feche para tocar; mais rápido soa mais alto."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gleichmäßige Luft lässt die Stimmzungen ohne Pumpen klingen, zum Üben oder wenn das Balgziehen schwerfällt. Ist Leichte Luft aus, funktioniert der Balg wie bei einem echten Akkordeon: auf- und zuziehen zum Spielen, schneller klingt lauter."
           }
         }
       }
@@ -3189,6 +3385,34 @@
           "stringUnit": {
             "state": "translated",
             "value": "Freigeschaltet. Viel Spaß!"
+          }
+        }
+      }
+    },
+    "Upcoming notes": {
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sıradaki notalar"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Próximas notas"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Próximas notas"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nächste Töne"
           }
         }
       }

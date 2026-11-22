@@ -11,9 +11,9 @@ final class Instrument: ObservableObject {
     @AppStorage("voice") var voiceRaw = Voice.classic.rawValue { didSet { applySound() } }
     @AppStorage("noteNames") var noteNames = true
     @AppStorage("steadyAir") var steadyAir = false
-    /// Off by default: without a working hinge, pressing a button supplies air by itself, and dragging the bellows
-    /// strip adds dynamics on top. On means sound only while the bellows move (also on non-Duo devices).
-    @AppStorage("pumpOnly") var pumpOnly = false
+    /// Easy air: without a working hinge, pressing a button supplies air by itself and dragging the bellows only adds
+    /// dynamics. Off, the bellows work like a real accordion: no movement, no sound. On by default for a first run.
+    @AppStorage("easyAir") var easyAir = true
     @AppStorage("sensitivity") var sensitivity = 1.0 { didSet { bellows.fullScale = 110 / max(0.3, sensitivity) } }
     @AppStorage("bassLevel") var bassLevel = 0.8 { didSet { ReedEngine.shared.setBassLevel(bassLevel) } }
 
@@ -51,6 +51,9 @@ final class Instrument: ObservableObject {
     @Published var lessonFeedback: LessonProgress.Result?
     @Published var finishedLesson: LessonProgress?
     @Published private(set) var demoPlaying = false
+    /// The button hit last in Play along, and when, for a one-shot pulse on the board.
+    @Published private(set) var lastHit: (button: Int, at: Double)?
+    @AppStorage("seenLessonHint") var seenLessonHint = false
     private var demoTask: Task<Void, Never>?
     @Published private(set) var demoButton: Int?
 
@@ -127,11 +130,20 @@ final class Instrument: ObservableObject {
     }
 
     /// Drag on the bellows strip (no hinge, or by choice). `delta` in points along the pull direction.
+    /// Points of drag for the full travel of the manual bellows, closed to fully drawn.
+    static let bellowsTravel = 280.0
+
+    /// Drag on the bellows strip (no hinge, or by choice). `delta` in points; positive draws the bellows open.
+    /// Like a real accordion the bellows have ends: at fully closed or fully drawn, more drag moves no air, so the
+    /// player has to turn around. The bellows model sees the travel as degrees, the same unit as the hinge.
     func dragBellows(by delta: Double) {
         guard !frozen else { return }
-        virtualPosition += delta * 0.45
-        if !hasHinge || hingeClosed {
-            extension01 = max(0, min(1, extension01 + delta / 600))
+        let manual = !pumpsWithHinge
+        if manual {
+            extension01 = max(0, min(1, extension01 + delta / Self.bellowsTravel))
+            virtualPosition = extension01 * 160
+        } else {
+            virtualPosition += delta * 0.45
         }
         if bellows.feed(position: virtualPosition, at: CACurrentMediaTime()) { directionChanged() }
         updateAir()
@@ -160,7 +172,7 @@ final class Instrument: ObservableObject {
     var pumpsWithHinge: Bool { hasHinge && !hingeClosed }
 
     /// Air arrives without moving anything: steady air, or a device without a usable hinge.
-    var automaticAir: Bool { steadyAir || (!pumpsWithHinge && !pumpOnly) }
+    var automaticAir: Bool { steadyAir || (!pumpsWithHinge && easyAir) }
 
     /// Shown when buttons are held on an open iPhone Duo but the hinge has not moved for a while.
     @Published private(set) var needsPumpHint = false
@@ -236,8 +248,14 @@ final class Instrument: ObservableObject {
         sounding = now
         guard var l = lesson, !demoPlaying, !new.isEmpty, !l.finished else { return }
         for p in new.sorted() {
+            let target = l.current
             let r = l.sounded(pitch: p)
             if r != .ignored { lessonFeedback = r }
+            if r == .advanced, let t = target {
+                lastHit = (t.buttonID, CACurrentMediaTime())
+                Haptics.shared.hit()
+                seenLessonHint = true
+            }
             if l.finished { break }
         }
         lesson = l
@@ -292,6 +310,7 @@ final class Instrument: ObservableObject {
                     stepIndex += 1
                     if let d = f.direction, d != self.direction { self.direction = d }
                     self.demoButton = f.buttonID
+                    Haptics.shared.note(long: dur >= 0.6)
                     ReedEngine.shared.press(Self.demoIDBase, notes: [f.pitch], side: .treble)
                     try? await Task.sleep(nanoseconds: UInt64(dur * 0.88 * 1e9))
                     ReedEngine.shared.release(Self.demoIDBase)

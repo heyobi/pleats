@@ -1,4 +1,5 @@
 import SwiftUI
+import QuartzCore
 
 /// Where the buttons of one side go. Rows run along the panel's long side; row 0 is nearest the bellows, the lowest
 /// note at the top (or the left), like the keyboard of a button accordion.
@@ -110,8 +111,27 @@ struct TrebleBoard: View {
                         if let t = target, t.buttonID == b.id {
                             let color = t.direction == .push ? theme.pushGlow : theme.glow
                             PearlPainter.glow(&ctx, center: c, diameter: lay.diameter, color: color, strength: 1, pulse: pulse)
+                            // The same note again next: show how many hits in a row.
+                            if let l = inst.lesson {
+                                var run = 1
+                                var k = l.index + 1
+                                while k < l.plan.steps.count, l.plan.steps[k].pitch == t.pitch { run += 1; k += 1 }
+                                if run > 1 {
+                                    let badge = Text("×\(run)").font(.system(size: lay.diameter * 0.26, weight: .heavy, design: .rounded))
+                                        .foregroundColor(theme.glow)
+                                    ctx.draw(badge, at: CGPoint(x: c.x + lay.diameter * 0.52, y: c.y - lay.diameter * 0.52))
+                                }
+                            }
                         } else if let n = next, n.buttonID == b.id {
                             PearlPainter.glow(&ctx, center: c, diameter: lay.diameter, color: theme.glow, strength: 0.28, pulse: 0)
+                        }
+                        if let h = inst.lastHit, h.button == b.id {
+                            // One pulse per correct hit: a ring that grows and fades.
+                            let age = CACurrentMediaTime() - h.at
+                            if age < 0.4 {
+                                let k = age / 0.4
+                                PearlPainter.glow(&ctx, center: c, diameter: lay.diameter * (1 + 0.5 * k), color: theme.glow, strength: 1 - k, pulse: 0)
+                            }
                         }
                         if inst.demoButton == b.id {
                             PearlPainter.glow(&ctx, center: c, diameter: lay.diameter, color: theme.glow, strength: 0.9, pulse: 0.5)

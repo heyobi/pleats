@@ -38,6 +38,29 @@ final class Haptics {
         tap.impactOccurred(intensity: 0.55)
     }
 
+    /// A correct note in Play along: one light, distinct tick per hit.
+    func hit() {
+        guard enabled else { return }
+        UIImpactFeedbackGenerator(style: .light).impactOccurred(intensity: 0.9)
+    }
+
+    /// A note of the Listen demo: a tick for short notes, a longer soft buzz for held ones.
+    func note(long: Bool) {
+        guard enabled else { return }
+        guard long, let engine else { tap.impactOccurred(intensity: 0.45); return }
+        let events = [
+            CHHapticEvent(eventType: .hapticTransient, parameters: [
+                CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.6),
+                CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.5)], relativeTime: 0),
+            CHHapticEvent(eventType: .hapticContinuous, parameters: [
+                CHHapticEventParameter(parameterID: .hapticIntensity, value: 0.35),
+                CHHapticEventParameter(parameterID: .hapticSharpness, value: 0.1)], relativeTime: 0.02, duration: 0.35),
+        ]
+        guard let pattern = try? CHHapticPattern(events: events, parameters: []) else { return }
+        try? engine.start()
+        try? engine.makePlayer(with: pattern).start(atTime: CHHapticTimeImmediate)
+    }
+
     func reverse() {
         guard enabled else { return }
         turn.impactOccurred(intensity: 0.7)
