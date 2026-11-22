@@ -26,7 +26,7 @@ struct PlayView: View {
             let vertical = fold.map { $0.height >= $0.width } ?? (size.width >= size.height)
             let splitAt: CGFloat = fold.map { vertical ? $0.midX : $0.midY } ?? (vertical ? size.width / 2 : size.height / 2)
             let top = max(proxy.safeAreaInsets.top, 8) + 52
-            let maxStrip: CGFloat = min(84, max(48, (vertical ? size.width : size.height) * 0.075))
+            let maxStrip: CGFloat = min(112, max(58, (vertical ? size.width : size.height) * 0.09))
             let strip = maxStrip * CGFloat(0.55 + 0.45 * inst.extension01)
             let pad: CGFloat = 6
             let inner = maxStrip / 2 + 4

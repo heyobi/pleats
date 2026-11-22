@@ -21,7 +21,7 @@ struct Theme {
             ? Theme(bodyTop: Color(red: 0.12, green: 0.05, blue: 0.07), bodyBottom: Color(red: 0.04, green: 0.02, blue: 0.03),
                     fleck: Color(red: 1, green: 0.85, blue: 0.75),
                     trim: Color(red: 0.86, green: 0.70, blue: 0.40), trimDark: Color(red: 0.45, green: 0.33, blue: 0.14),
-                    bellowsA: Color(red: 0.07, green: 0.06, blue: 0.07), bellowsB: Color(red: 0.20, green: 0.17, blue: 0.18),
+                    bellowsA: Color(red: 0.05, green: 0.03, blue: 0.035), bellowsB: Color(red: 0.36, green: 0.09, blue: 0.12),
                     bellowsEdge: Color(red: 0.90, green: 0.86, blue: 0.80),
                     ink: Color(red: 0.98, green: 0.94, blue: 0.86), subtle: Color(red: 0.98, green: 0.94, blue: 0.86).opacity(0.62),
                     glow: Color(red: 1.0, green: 0.78, blue: 0.32), pushGlow: Color(red: 0.45, green: 0.80, blue: 1.0))

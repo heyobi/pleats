@@ -54,6 +54,7 @@ struct ShotsTour {
         await step("2-lesson@140")
 
         // 3. Registers, in the light finish.
+        inst.endLesson()
         inst.forcedScheme = .light
         inst.registerRaw = Register.master.rawValue
         inst.shotRegisters = true

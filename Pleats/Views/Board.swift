@@ -16,15 +16,16 @@ struct BoardLayout {
     let wrapStagger: Bool       // alternate offsets (lattice) instead of a cumulative slant
 
     static func treble(_ size: CGSize, layout: TrebleLayout, near: Near) -> BoardLayout {
-        let vertical = size.height >= size.width
+        // Rows run parallel to the bellows, like on the instrument.
+        let vertical = near == .leading || near == .trailing
         let major = vertical ? size.height : size.width
         let minor = vertical ? size.width : size.height
         var rows: Int
         var s: CGFloat
         switch layout {
         case .chromatic:
-            rows = minor / 5 >= 58 ? 5 : 3
-            s = min(max(min(minor / CGFloat(rows) / 0.9, 82), 46), major / 8.6)
+            rows = minor / 5 >= 64 ? 5 : 3
+            s = min(max(min(minor / CGFloat(rows) / 0.9, 82), 46), major / (rows == 3 ? 7.6 : 8.6))
         case .diatonic:
             rows = 2
             s = min(max(min(minor / 2.6, 92), 50), major / 8.6)
@@ -37,7 +38,7 @@ struct BoardLayout {
     }
 
     static func bass(_ size: CGSize, near: Near) -> BoardLayout {
-        let vertical = size.height >= size.width
+        let vertical = near == .leading || near == .trailing
         let major = vertical ? size.height : size.width
         let minor = vertical ? size.width : size.height
         var s = min(max(min(minor / 4 / 0.9, 66), 40), major / 7.4)
@@ -161,15 +162,19 @@ struct BassBoard: View {
                     PearlPainter.draw(&ctx, center: c, diameter: lay.diameter, ebony: false, pressed: pressed, theme: theme)
                     if b.row == .bass && (b.root == 0 || b.root == 4 || b.root == 8) {
                         // Guide studs: a jewel on C, small rings on E and A♭, as on real bass boards.
-                        let r: CGFloat = b.root == 0 ? lay.diameter * 0.16 : lay.diameter * 0.1
-                        ctx.stroke(Path(ellipseIn: CGRect(x: c.x - r, y: c.y + lay.diameter * 0.18 - r, width: 2 * r, height: 2 * r)),
-                                   with: .color(theme.trimDark.opacity(0.8)), lineWidth: 1.2)
+                        let r: CGFloat = b.root == 0 ? lay.diameter * 0.07 : lay.diameter * 0.045
+                        let dot = CGRect(x: c.x - r, y: c.y + lay.diameter * 0.3 - r, width: 2 * r, height: 2 * r)
+                        if b.root == 0 {
+                            ctx.fill(Path(ellipseIn: dot), with: .color(theme.trim))
+                        } else {
+                            ctx.stroke(Path(ellipseIn: dot), with: .color(theme.trimDark.opacity(0.8)), lineWidth: 1)
+                        }
                     }
                     if inst.noteNames {
                         let label = Text(b.label)
                             .font(.system(size: lay.diameter * (b.row == .bass ? 0.34 : 0.27), weight: b.row == .bass ? .bold : .medium, design: .serif))
                             .foregroundColor(Color(red: 0.35, green: 0.27, blue: 0.22))
-                        ctx.draw(label, at: CGPoint(x: c.x, y: c.y - (b.row == .bass && b.root % 4 == 0 ? lay.diameter * 0.06 : 0)))
+                        ctx.draw(label, at: CGPoint(x: c.x, y: c.y - (b.row == .bass && b.root % 4 == 0 ? lay.diameter * 0.07 : 0)))
                     }
                     if let h = hintButton, h.id == b.id {
                         PearlPainter.glow(&ctx, center: c, diameter: lay.diameter, color: Color(white: 0.92), strength: 0.55, pulse: 0)
