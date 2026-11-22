@@ -24,8 +24,10 @@ struct BoardLayout {
         var s: CGFloat
         switch layout {
         case .chromatic:
-            rows = (minor / 5 >= 60 && major / 8.6 >= 58) ? 5 : 3
-            s = min(max(min(minor / CGFloat(rows) / 0.9, 82), 46), major / (rows == 3 ? 7.6 : 8.6))
+            // Five rows when the panel is deep enough for buttons as large as the length allows; else three.
+            let along = min(82, major / 7.6)
+            rows = minor >= 5 * 0.9 * along ? 5 : 3
+            s = min(max(min(minor / CGFloat(rows) / 0.9, 82), 46), major / 7.6)
         case .diatonic:
             rows = 2
             s = min(max(min(minor / 2.6, 92), 50), major / 8.6)
