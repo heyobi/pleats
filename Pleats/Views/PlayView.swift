@@ -361,6 +361,9 @@ struct RegisterTray: View {
 struct LessonBar: View {
     @EnvironmentObject var inst: Instrument
     @Environment(\.colorScheme) var scheme
+    @Environment(\.horizontalSizeClass) var sizeClass
+    /// Narrow screens (iPhone in portrait): the mode labels stay whole; the hint and Start over make room.
+    private var compact: Bool { sizeClass == .compact && UIScreen.main.bounds.width < 500 }
 
     var body: some View {
         let theme = Theme.of(scheme)
@@ -371,11 +374,12 @@ struct LessonBar: View {
                     modeButton("Play along", icon: "hand.point.up.left", on: !inst.demoPlaying, theme: theme) { inst.stopDemo() }
                     modeButton("Listen", icon: "ear", on: inst.demoPlaying, theme: theme) { inst.playDemo() }
                 }
+                .fixedSize()
                 .background(Capsule().fill(.black.opacity(0.25)))
                 .overlay(Capsule().stroke(theme.trim.opacity(0.5), lineWidth: 1))
                 ZStack(alignment: .leading) {
                     RhythmStrip(progress: l, theme: theme)
-                    if !inst.seenLessonHint && !inst.demoPlaying {
+                    if !inst.seenLessonHint && !inst.demoPlaying && !compact {
                         Text("Press the glowing button. Listen plays the song for you first.")
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(theme.ink)
@@ -392,8 +396,10 @@ struct LessonBar: View {
                     }
                 }
                 .frame(maxWidth: .infinity)
-                Button { inst.restartLesson() } label: { Image(systemName: "arrow.counterclockwise").brassControl(theme) }
-                    .accessibilityLabel(Text("Start over"))
+                if !compact {
+                    Button { inst.restartLesson() } label: { Image(systemName: "arrow.counterclockwise").brassControl(theme) }
+                        .accessibilityLabel(Text("Start over"))
+                }
                 Button { inst.endLesson() } label: { Image(systemName: "xmark").brassControl(theme) }
                     .accessibilityLabel(Text("Close song"))
             }
