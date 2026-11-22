@@ -337,7 +337,7 @@ struct LessonBanner: View {
                     .accessibilityElement(children: .combine)
                     .accessibilityLabel(Text("Next note \(Pitch.name(c.pitch))"))
                     if inst.pressure < 0.05 && !inst.pressedTreble.isEmpty {
-                        Text(inst.hasHinge && !inst.hingeClosed ? "Pump the hinge" : "Move the bellows")
+                        Text(inst.hasHinge && !inst.hingeClosed ? LocalizedStringKey("Pump the hinge") : LocalizedStringKey("Move the bellows"))
                             .font(.caption.weight(.semibold))
                             .foregroundStyle(theme.subtle)
                     }
@@ -383,12 +383,12 @@ struct ResultCard: View {
             }
             .accessibilityElement()
             .accessibilityLabel(Text("\(progress.stars) of 3 stars"))
-            Text(progress.stars == 3 ? "Beautifully played!" : "Song complete!")
+            Text(progress.stars == 3 ? LocalizedStringKey("Beautifully played!") : LocalizedStringKey("Song complete!"))
                 .font(.system(.title2, design: .serif).weight(.semibold))
             Text(progress.plan.song.title)
                 .font(.system(.body, design: .serif))
                 .foregroundStyle(.secondary)
-            Text(progress.mistakes == 0 ? "Not a single slip." : "\(progress.mistakes) slips")
+            Text(progress.mistakes == 0 ? LocalizedStringKey("Not a single slip.") : LocalizedStringKey("\(progress.mistakes) slips"))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             HStack(spacing: 10) {

@@ -117,13 +117,13 @@ final class SongTests: XCTestCase {
                 XCTAssertNotNil(Stradella.button(for: chord, in: Stradella.buttons(columns: 12)), "\(s.id): \(chord)")
             }
         }
-        XCTAssertEqual(SongBook.all.filter(\.isFree).count, 8)
+        XCTAssertEqual(SongBook.all.filter(\.isFree).count, 9)
         XCTAssertEqual(Set(SongBook.all.map(\.id)).count, SongBook.all.count)
     }
 
     func testDiatonicTransposesIntoItsKeys() {
         let diatonic = TrebleLayout.diatonic.buttons(perRow: 10)
-        let plan = LessonPlan.make(song: SongBook.song("twinkle")!, buttons: diatonic, bisonoric: true)
+        let plan = LessonPlan.make(song: SongBook.song("ode")!, buttons: diatonic, bisonoric: true)
         XCTAssertNotNil(plan)
         XCTAssertTrue(plan!.steps.allSatisfy { $0.direction != nil })
         for st in plan!.steps {

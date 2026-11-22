@@ -19,7 +19,7 @@ struct SongsSheet: View {
                 Section {
                     ForEach(SongBook.all.filter { !$0.isFree }) { row($0) }
                 } header: {
-                    Text(store.pro ? "Pro songs" : "More with Pro")
+                    Text(store.pro ? LocalizedStringKey("Pro songs") : LocalizedStringKey("More with Pro"))
                 }
             }
             .navigationTitle("Songs")
@@ -208,13 +208,13 @@ struct PaywallSheet: View {
                 VStack(alignment: .leading, spacing: 12) {
                     feature("circle.grid.cross", "Five more registers: Violin, Bassoon, Piccolo, Organ and Master")
                     feature("waveform.path", "Three more voices: Cassotto, Harmonium and Folk")
-                    feature("music.note.list", "Seven more songs, including Sarı Gelin, Greensleeves and Für Elise")
+                    feature("music.note.list", "Ten more songs: an original tango, The Entertainer, Greensleeves, Sarı Gelin and more")
                     feature("square.and.arrow.up", "Share and export your recordings")
                     feature("heart", "One purchase, yours for good. No subscription, no ads.")
                 }
                 .padding(18)
                 .background(RoundedRectangle(cornerRadius: 20, style: .continuous).fill(.thinMaterial))
-                Text("The free instrument stays complete: three registers, the classic voice, eight songs and recording.")
+                Text("The free instrument stays complete: three registers, the classic voice, nine songs and recording.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)

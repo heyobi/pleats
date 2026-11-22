@@ -28,6 +28,7 @@ final class ReedEngine {
         var env: Float = 0
         var lp: Float = 0
         var lp2: Float = 0
+        var drift: Float = 0        // slow random tuning wander, as a fraction of pitch
     }
 
     struct Params {
@@ -48,6 +49,7 @@ final class ReedEngine {
     let engine = AVAudioEngine()
     private var source: AVAudioSourceNode!
     private let reverb = AVAudioUnitReverb()
+    private let body = AVAudioUnitEQ(numberOfBands: 4)
     private let voices: UnsafeMutablePointer<VoiceShared>
     private let rt: UnsafeMutablePointer<VoiceRT>
     private let params: UnsafeMutablePointer<Params>
@@ -121,10 +123,24 @@ final class ReedEngine {
         let render = Self.makeRender(voices: voices, rt: rt, params: params, tables: tables, sampleRate: sampleRate)
         source = AVAudioSourceNode(format: format, renderBlock: render)
         engine.attach(source)
+        engine.attach(body)
         engine.attach(reverb)
-        reverb.loadFactoryPreset(.mediumRoom)
-        reverb.wetDryMix = 14
-        engine.connect(source, to: reverb, format: format)
+        // The wooden body and reed blocks: a little warmth, the nasal "box" resonance around 1.2 kHz, a softer top.
+        let bands: [(AVAudioUnitEQFilterType, Float, Float, Float)] = [
+            (.highPass, 55, 0, 0.7), (.parametric, 240, 1.5, 1.0), (.parametric, 1250, 2.5, 1.4), (.highShelf, 6500, -5, 0.7),
+        ]
+        for (i, b) in bands.enumerated() {
+            let band = body.bands[i]
+            band.filterType = b.0
+            band.frequency = b.1
+            band.gain = b.2
+            band.bandwidth = b.3
+            band.bypass = false
+        }
+        reverb.loadFactoryPreset(.mediumHall)
+        reverb.wetDryMix = 18
+        engine.connect(source, to: body, format: format)
+        engine.connect(body, to: reverb, format: format)
         engine.connect(reverb, to: engine.mainMixerNode, format: nil)
         engine.prepare()
         try? engine.start()
@@ -257,8 +273,9 @@ final class ReedEngine {
                                    params: UnsafeMutablePointer<Params>, tables: UnsafeMutablePointer<Float>,
                                    sampleRate: Double) -> AVAudioSourceNodeRenderBlock {
         let sr = Float(sampleRate)
-        let attack = 1 - exp(-1 / (0.004 * sr))
-        let releaseK = 1 - exp(-1 / (0.035 * sr))
+        // Reeds take a moment to speak and stop a little softer than they start.
+        let attack = 1 - exp(-1 / (0.016 * sr))
+        let releaseK = 1 - exp(-1 / (0.05 * sr))
         let pressK = 1 - exp(-1 / (0.008 * sr))
         let tableSize = ReedEngine.tableSize
         let tableMask = tableSize - 1
@@ -297,8 +314,12 @@ final class ReedEngine {
                 let treble = sh.side == 0
                 let n = Int(treble ? p.trebleCount : p.bassCount)
                 counts[v] = n
+                noiseSeed = noiseSeed &* 1664525 &+ 1013904223
+                let jitter = (Float(noiseSeed >> 8) / Float(1 << 24) - 0.5) * 0.00003
+                rt[v].drift = max(-0.0004, min(0.0004, rt[v].drift * 0.999 + jitter))
+                let wander = 1 + rt[v].drift
                 for r in 0..<n {
-                    let f = Double(sh.freq * (treble ? el(p.trebleFactor, r) : el(p.bassFactor, r)))
+                    let f = Double(sh.freq * (treble ? el(p.trebleFactor, r) : el(p.bassFactor, r)) * (r == 1 ? wander : 1 / wander))
                     incs[v * 4 + r] = f / Double(sr)
                     var b = Int(floor(log2(max(f, 27.5) / 27.5)))
                     b = max(0, min(bands - 1, b))

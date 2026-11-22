@@ -80,6 +80,6 @@ struct BellowsView: View {
         }
         .accessibilityElement()
         .accessibilityLabel(Text("Bellows"))
-        .accessibilityValue(Text(direction == .pull ? "Opening" : "Closing"))
+        .accessibilityValue(Text(direction == .pull ? LocalizedStringKey("Opening") : LocalizedStringKey("Closing")))
     }
 }

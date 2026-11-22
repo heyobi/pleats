@@ -79,14 +79,21 @@ enum SongBook {
         Song("scale", String(localized: "First Steps: C Major Scale"), String(localized: "Warm-up"), tempo: 80, free: true, """
         [C] C4 D4 E4 F4 | [G] G4 A4 B4 [C] C5:2 | R:1 [C] C5 B4 A4 | [G] G4 F4 E4 D4 | [C] C4:3 R:1
         """),
-        Song("twinkle", String(localized: "Twinkle, Twinkle, Little Star"), String(localized: "Traditional, France"), tempo: 96, free: true, """
-        [C] C4 C4 G4 G4 | [F] A4 A4 [C] G4:2 | [F] F4 F4 [C] E4 E4 | [G7] D4 D4 [C] C4:2 |
-        [C] G4 G4 [F] F4 F4 | [C] E4 E4 [G7] D4:2 | [C] G4 G4 [F] F4 F4 | [C] E4 E4 [G7] D4:2 |
-        [C] C4 C4 G4 G4 | [F] A4 A4 [C] G4:2 | [F] F4 F4 [C] E4 E4 | [G7] D4 D4 [C] C4:2
+        Song("valse", "Valse des Plis", String(localized: "Original musette waltz for Pleats"), tempo: 150, free: true, """
+        [Am] E5:2 C5 | A4:2 C5 | [E7] B4 G#4 B4 | E5:3 | D5:2 B4 | G#4:2 B4 | [Am] A4 C5 E5 | A5:3 |
+        [Dm] F5:2 D5 | A4:2 D5 | [Am] C5 E5 A5 | E5:3 | [E7] D5 C5 B4 | G#4 A4 B4 | [Am] A4:3 | R:3
         """),
-        Song("frere", String(localized: "Frère Jacques"), String(localized: "Traditional, France"), tempo: 104, free: true, """
-        [C] C4 D4 E4 C4 | C4 D4 E4 C4 | E4 F4 G4:2 | E4 F4 G4:2 |
-        G4:.5 A4:.5 G4:.5 F4:.5 E4 C4 | G4:.5 A4:.5 G4:.5 F4:.5 E4 C4 | C4 [G] G3 [C] C4:2 | C4 [G] G3 [C] C4:2
+        Song("ode", String(localized: "Ode to Joy"), String(localized: "L. van Beethoven, 1824"), tempo: 108, free: true, """
+        [C] E4 E4 F4 G4 | [G] G4 F4 E4 D4 | [C] C4 C4 D4 E4 | [G] E4:1.5 D4:.5 D4:2 |
+        [C] E4 E4 F4 G4 | [G] G4 F4 E4 D4 | [C] C4 C4 D4 E4 | [G] D4:1.5 [C] C4:.5 C4:2 |
+        [G] D4 D4 E4 C4 | D4 E4:.5 F4:.5 E4 C4 | D4 E4:.5 F4:.5 E4 D4 | [C] C4 D4 [G] G3:2 |
+        [C] E4 E4 F4 G4 | [G] G4 F4 E4 D4 | [C] C4 C4 D4 E4 | [G] D4:1.5 [C] C4:.5 C4:2
+        """),
+        Song("sailor", String(localized: "Drunken Sailor"), String(localized: "Sea shanty, traditional"), tempo: 116, free: true, """
+        [Dm] A4:.5 A4:.25 A4:.25 A4:.5 A4:.25 A4:.25 | A4:.5 D4:.5 F4:.5 A4:.5 | [C] G4:.5 G4:.25 G4:.25 G4:.5 G4:.25 G4:.25 | G4:.5 C4:.5 E4:.5 G4:.5 |
+        [Dm] A4:.5 A4:.25 A4:.25 A4:.5 A4:.25 A4:.25 | A4:.5 B4:.5 C5:.5 D5:.5 | [C] C5:.5 A4:.5 G4:.5 E4:.5 | [Dm] D4 D4 |
+        [Dm] A4 A4 | A4:.5 D4:.5 F4:.5 A4:.5 | [C] G4 G4 | G4:.5 C4:.5 E4:.5 G4:.5 |
+        [Dm] A4 A4 | A4:.5 B4:.5 C5:.5 D5:.5 | [C] C5:.5 A4:.5 G4:.5 E4:.5 | [Dm] D4 D4
         """),
         Song("uskudar", "Üsküdar'a Gider İken", String(localized: "Traditional, Türkiye"), tempo: 84, free: true, """
         [Gm] G4:.75 D5:.25 D5:.5 D5:.5 | [Cm] Eb5:.25 D5:.25 Eb5:.25 F5:.25 [Gm] D5:.5 D5:.5 | [Cm] C5:.5 C5:.25 C5:.25 Bb4:.5 C5:.5 | [D7] D5:.25 Eb5:.25 D5:.25 C5:.25 Bb4:.25 A4:.25 [Gm] G4:.5 |
@@ -94,7 +101,7 @@ enum SongBook {
         [Gm] G4:.75 A4:.25 Bb4:.5 C5:.5 | [D7] D5:.25 Eb5:.25 D5:.25 C5:.25 Bb4:.25 A4:.25 [Gm] G4:.5 | [Cm] A4:.25 C5:.25 Bb4:.25 A4:.25 [D7] A4:.25 G4:.25 F#4:.25 G4:.25 | [D7] A4:1 R:1 |
         [Gm] G4:.75 A4:.25 Bb4:.5 C5:.5 | [D7] D5:.25 Eb5:.25 D5:.25 C5:.25 Bb4:.25 A4:.25 [Gm] G4:.5 | [Cm] A4:.25 C5:.25 Bb4:.25 A4:.25 [D7] A4:.25 G4:.25 G4:.25 F#4:.25 | [Gm] G4:2
         """),
-        Song("yemen", "Havada Bulut Yok (Yemen Türküsü)", String(localized: "Traditional, Türkiye"), tempo: 150, free: true, """
+        Song("yemen", "Havada Bulut Yok (Yemen Türküsü)", String(localized: "Traditional, Türkiye"), tempo: 150, free: false, """
         R:1 [Am] C5:.5 D5:1 E5:1 E5:1.5 | E5:2.5 E5:.25 [Dm] F5:.25 D5:.25 E5:.25 D5:.25 E5:.25 D5:.25 E5:.25 D5:.5 |
         [G] D5:.5 R:.5 G5:.5 G5:.5 D5:.5 D5:1 E5:.5 C5:.25 E5:.25 D5:.5 | [Am] D5:1 C5:.5 D5:1 E5:1 E5:1.5 |
         [Am] E5:2.5 E5:.25 [Dm] F5:.25 D5:.25 E5:.25 D5:.25 E5:.25 D5:.25 E5:.25 D5:.5 | [G] D5:.5 R:.5 G5:.5 G5:.5 D5:.5 D5:1 E5:.5 C5:.25 E5:.25 D5:.5 |
@@ -109,11 +116,23 @@ enum SongBook {
         [G] D4 | G4:2 B4:.5 G4:.5 | B4:2 A4 | [C] G4:2 E4 | [G] D4:2 D4 | G4:2 B4:.5 G4:.5 | B4:2 A4 | [D] D5:3 | D5:2 B4 |
         [G] D5:1.5 B4:.5 D5:.5 B4:.5 | G4:2 D4 | [C] E4:1.5 G4:.5 G4:.5 E4:.5 | [G] D4:2 D4 | G4:2 B4:.5 G4:.5 | [D7] B4:2 A4 | [G] G4:3
         """),
-        Song("jingle", String(localized: "Jingle Bells"), String(localized: "J. L. Pierpont, 1857"), tempo: 132, free: true, """
+        Song("jingle", String(localized: "Jingle Bells"), String(localized: "J. L. Pierpont, 1857"), tempo: 132, free: false, """
         [C] E4 E4 E4:2 | E4 E4 E4:2 | E4 G4 C4:1.5 D4:.5 | E4:4 | [F] F4 F4 F4:1.5 F4:.5 | [C] F4 E4 E4 E4:.5 E4:.5 | [D7] E4 D4 D4 E4 | [G7] D4:2 G4:2 |
         [C] E4 E4 E4:2 | E4 E4 E4:2 | E4 G4 C4:1.5 D4:.5 | E4:4 | [F] F4 F4 F4 F4 | [C] F4 E4 E4 E4:.5 E4:.5 | [G7] G4 G4 F4 D4 | [C] C4:4
         """),
         // Pro
+        Song("susanna", String(localized: "Oh! Susanna"), String(localized: "S. Foster, 1848"), tempo: 120, free: true, """
+        [C] C4:.5 D4:.5 | E4 G4 G4:1.5 A4:.5 | G4 E4 C4:1.5 D4:.5 | E4 E4 D4 C4 | [G7] D4:3 C4:.5 D4:.5 |
+        [C] E4 G4 G4:1.5 A4:.5 | G4 E4 C4:1.5 D4:.5 | [G7] E4 E4 D4 D4 | [C] C4:3
+        """),
+        Song("tango", "Tango de la Bisagra", String(localized: "Original tango for Pleats"), tempo: 108, free: false, """
+        [Dm] A4:.75 A4:.25 A4:.5 Bb4:.5 A4 G4:.5 F4:.5 | E4:.75 F4:.25 G4:.5 A4:.5 D4:2 | [A7] C#5:.75 C#5:.25 C#5:.5 D5:.5 E5 D5:.5 C#5:.5 | [Dm] D5:2 A4:2 |
+        [Gm] Bb4:.75 Bb4:.25 Bb4:.5 C5:.5 D5 C5:.5 Bb4:.5 | [Dm] A4:.75 Bb4:.25 A4:.5 G4:.5 F4 E4:.5 F4:.5 | [A7] E4 G4 C#5 E5 | [Dm] D5:3 R:1
+        """),
+        Song("entertainer", String(localized: "The Entertainer"), String(localized: "S. Joplin, 1902"), tempo: 84, free: false, """
+        [C] D4:.25 D#4:.25 | E4:.25 C5:.5 E4:.25 C5:.5 E4:.25 C5:1.25 | C5:.25 D5:.25 D#5:.25 E5:.25 C5:.25 D5:.25 E5:.5 | [G7] B4:.25 D5:.5 [C] C5:1.25 D4:.25 D#4:.25 |
+        [C] E4:.25 C5:.5 E4:.25 C5:.5 E4:.25 C5:1.25 | [F] A4:.25 G4:.25 F#4:.25 A4:.25 C5:.25 E5:.5 D5:.25 | [G7] C5:.25 A4:.25 D5:1.5 | [C] C5:2
+        """),
         Song("sarigelin", "Sarı Gelin", String(localized: "Traditional, Anatolia"), tempo: 112, free: false, """
         R:1 [Em] E4:.5 E4:1 B4:1.5 | [Am] B4:1 A4:1.5 B4:.5 A4:.5 B4:1.5 | B4:1 B4:.25 C5:.25 B4:.75 A4:.25 A4:.75 G4:.25 A4:.5 B4:.5 R:.5 |
         [Am] B4:1 C#5:.5 A4:1 [Dm] G4:.75 F4:.25 G4:.25 A4:.25 A4:.5 R:.5 | [Dm] G4:1 A4:.5 F4:1 [Em] E4:1 E4:.25 G4:.25 G4:.5 R:.5 | [Dm] F4:1 G4:.5 [Em] E4:1 E4:2.5 |
@@ -136,7 +155,7 @@ enum SongBook {
         [C] C4 D4:.5 F4:.5 E4:.5 D4:.5 G4 | [G7] G4 G4:.5 A4:.5 E4:.5 F4:.5 D4 | D4 D4:.5 F4:.5 E4:.5 D4:.5 [C] C4:.5 C5:.5 | B4:.5 A4:.5 G4:.5 F4:.5 [G7] E4:.5 D4:.5 [C] C4 |
         [C] C4 D4:.5 F4:.5 E4:.5 D4:.5 G4 | [G7] G4 G4:.5 A4:.5 E4:.5 F4:.5 D4 | D4 D4:.5 F4:.5 E4:.5 D4:.5 [C] C4:.5 G4:.5 | [G7] D4:.5 E4:.5 D4:.5 E4:.5 [C] C4:2
         """),
-        Song("cucaracha", String(localized: "La Cucaracha"), String(localized: "Traditional, Mexico"), tempo: 160, free: false, """
+        Song("cucaracha", String(localized: "La Cucaracha"), String(localized: "Traditional, Mexico"), tempo: 160, free: true, """
         [F] C4:.5 C4:.5 C4:.5 F4:1.5 A4 | C4:.5 C4:.5 C4:.5 F4:1.5 A4 | [C7] F4 F4:.5 E4:.5 E4:.5 D4:.5 D4:.5 C4:1.5 R:1 |
         [C7] C4:.5 C4:.5 C4:.5 E4:1.5 G4 | C4:.5 C4:.5 C4:.5 E4:1.5 G4 | [F] C5 D5:.5 C5:.5 Bb4:.5 A4:.5 G4:.5 F4:1.5 R:1
         """),
