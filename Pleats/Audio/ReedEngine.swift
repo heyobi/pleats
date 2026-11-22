@@ -129,7 +129,15 @@ final class ReedEngine {
             try engine.start()
             lastError = nil
         } catch {
-            lastError = "engine: \(error.localizedDescription)"
+            // Fall back to the dry synth straight into the mixer rather than stay silent.
+            let first = "engine: \((error as NSError).code)"
+            engine.stop()
+            engine.disconnectNodeOutput(source)
+            engine.disconnectNodeOutput(body)
+            engine.disconnectNodeOutput(reverb)
+            engine.connect(source, to: engine.mainMixerNode, format: nil)
+            engine.prepare()
+            do { try engine.start(); lastError = first + " (dry fallback)" } catch { lastError = first + ", fallback \((error as NSError).code)" }
         }
         started = true
 
@@ -156,7 +164,9 @@ final class ReedEngine {
             sampleRate = rate
             buildTables(sampleRate: rate)
         }
-        let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 1)!
+        // Stereo end to end (the render block writes the same signal to both channels): effect units and the
+        // output chain reject a mono source on some devices (-10868, format not supported).
+        let format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 2)!
         let render = Self.makeRender(voices: voices, rt: rt, params: params, tables: tables, sampleRate: sampleRate)
         source = AVAudioSourceNode(format: format, renderBlock: render)
         engine.attach(source)
@@ -178,14 +188,15 @@ final class ReedEngine {
         reverb.wetDryMix = 18
         engine.connect(source, to: body, format: format)
         engine.connect(body, to: reverb, format: format)
-        engine.connect(reverb, to: engine.mainMixerNode, format: nil)
+        engine.connect(reverb, to: engine.mainMixerNode, format: format)
     }
 
     /// Offline rendering for tests: the same graph, rendered without audio hardware.
     func startOffline(maxFrames: AVAudioFrameCount = 4096) throws {
-        buildGraph(sampleRate: 48_000)
         let out = AVAudioFormat(standardFormatWithSampleRate: 48_000, channels: 2)!
         try engine.enableManualRenderingMode(.offline, format: out, maximumFrameCount: maxFrames)
+        buildGraph(sampleRate: 48_000)
+        engine.prepare()
         try engine.start()
         started = true
     }
