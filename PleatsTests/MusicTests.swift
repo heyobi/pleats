@@ -121,6 +121,20 @@ final class SongTests: XCTestCase {
         XCTAssertEqual(Set(SongBook.all.map(\.id)).count, SongBook.all.count)
     }
 
+    /// The smallest boards the app lays out (iPhone in portrait, folded Duo) must still play every song.
+    func testEverySongFitsTheSmallestBoards() {
+        for perRow in 6...8 {
+            for rows in [3, 5] {
+                let span = 3 * (perRow - 1) + 4
+                let low = max(48, 72 - span / 2)
+                let board = TrebleLayout.chromatic.buttons(perRow: perRow, low: low).filter { $0.row < rows }
+                for s in SongBook.all {
+                    XCTAssertNotNil(LessonPlan.make(song: s, buttons: board, bisonoric: false), "\(s.id) on \(perRow)x\(rows)")
+                }
+            }
+        }
+    }
+
     func testDiatonicTransposesIntoItsKeys() {
         let diatonic = TrebleLayout.diatonic.buttons(perRow: 10)
         let plan = LessonPlan.make(song: SongBook.song("ode")!, buttons: diatonic, bisonoric: true)

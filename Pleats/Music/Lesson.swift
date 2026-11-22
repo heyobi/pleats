@@ -22,7 +22,8 @@ struct LessonPlan: Equatable {
         // transposition is allowed there, smallest first.
         var shifts = [0, 12, -12, 24, -24]
         // A small board may not hold a song in its own key; then the nearest key that fits.
-        for k in 1...6 { shifts += [k, -k, k + 12, -k - 12] }
+        for k in 1...11 { shifts += [k, -k] }
+        for k in 1...11 { shifts += [k + 12, -k - 12] }
         if bisonoric {
             shifts = [0]
             for k in 1...11 { shifts += [k, -k] }

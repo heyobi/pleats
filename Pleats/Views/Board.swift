@@ -35,7 +35,7 @@ struct BoardLayout {
         }
         s = max(s, 42)
         let maxN = layout == .chromatic ? 14 : 10
-        let n = max(5, min(maxN, Int(major / s - 0.6)))
+        let n = max(layout == .chromatic ? 6 : 5, min(maxN, Int(major / s - 0.6)))
         return BoardLayout(size: size, rows: rows, perRow: n, spacing: s, diameter: s * 0.8, vertical: vertical, near: near,
                            stagger: 0.5, wrapStagger: true)
     }
